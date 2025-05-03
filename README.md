@@ -32,77 +32,36 @@ The `aztec start` command simplifies the process of running a sequencer node. It
 
 4. **Sepolia ETH**:
     - Obtain Sepolia ETH for gas costs via a faucet or the Aztec Discord.
+    ### Environment Configuration
 
-### Starting the Sequencer
+    Before starting the sequencer, you need to configure your environment variables. Follow these steps:
 
-Run the following command to start your sequencer:
+    1. Copy the example environment file:
+        ```bash
+        cp example.env .env
+        ```
 
-```bash
-aztec start --node --archiver --sequencer \
-  --network alpha-testnet \
-  --l1-rpc-urls https://example.com \
-  --l1-consensus-host-urls https://example.com \
-  --sequencer.validatorPrivateKey 0xYourPrivateKey \
-  --sequencer.coinbase 0xYourAddress \
-  --p2p.p2pIp 999.99.999.99 \
-  --p2p.maxTxPoolSize 1000000000
-```
+    2. Open the `.env` file in a text editor and fill in the required values:
+        ```bash
+        # Environment Variables
 
-### Registering as a Validator
+        # Ethereum RPC URL for the L1 execution client
+        ETHEREUM_HOSTS=https://eth-sepolia.g.alchemy.com/v2/
 
-Once synced, register as a validator using:
+        # Ethereum RPC URL for the L1 consensus client
+        L1_CONSENSUS_HOST_URLS=https://ethereum-sepolia.core.chainstack.com/beacon/
 
-```bash
-aztec add-l1-validator \
-  --l1-rpc-urls https://eth-sepolia.g.example.com/example/your-key \
-  --private-key your-private-key \
-  --attester your-validator-address \
-  --proposer-eoa your-validator-address \
-  --staking-asset-handler 0xF739D03e98e23A7B65940848aBA8921fF3bAc4b2 \
-  --l1-chain-id 11155111
-```
+        # Ethereum private key for the sequencer
+        VALIDATOR_PRIVATE_KEY=
 
-## Advanced Configuration
+        # Public address associated with your private key
+        COINBASE_ADDRESS=0x95
 
-### Using Environment Variables
+        # Log level for debugging
+        LOG_LEVEL=debug
 
-Create a `.env` file with configuration variables:
+        # Data directory for storing sequencer data
+        DATA_DIRECTORY=/data
+        ```
 
-```env
-ETHEREUM_HOSTS=https://example.com
-L1_CONSENSUS_HOST_URLS=https://example.com
-```
-
-Source the file before running the command:
-
-```bash
-source .env
-aztec start --network alpha-testnet --archiver --node --sequencer
-```
-
-### Using Docker Compose
-
-For Docker Compose setups, use the following configuration:
-
-```yaml
-services:
-  node:
-     image: aztecprotocol/aztec:0.85.0-alpha-testnet.5
-     environment:
-        ETHEREUM_HOSTS: ""
-        L1_CONSENSUS_HOST_URLS: ""
-        VALIDATOR_PRIVATE_KEY: $VALIDATOR_PRIVATE_KEY
-        P2P_IP: $P2P_IP
-     ports:
-        - 40400:40400/tcp
-        - 40400:40400/udp
-```
-
-## Troubleshooting
-
-- **L1 Access**: Use `host.docker.internal` for local RPC endpoints or configure `network_mode: "host"` in Docker Compose.
-- **Public IP**: Retrieve your public IP using `curl ifconfig.me`.
-
-For additional support, visit the [Aztec Discord](https://discord.gg/aztec).
-
-Happy sequencing!
+    3. Save the `.env` file after making the changes.
